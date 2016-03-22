@@ -6,8 +6,8 @@ const apiaibotkit = require('../apiaibotkit');
 const slackToken = process.env.SLACK_TOKEN;
 const apiaiToken = process.env.APIAI_TOKEN;
 
-var apiai = apiaibotkit(apiaiToken);
-var controller = Botkit.slackbot();
+const apiai = apiaibotkit(apiaiToken);
+const controller = Botkit.slackbot();
 
 controller.hears('.*', ['direct_message', 'direct_mention', 'mention'], function (bot, message) {
     try {
