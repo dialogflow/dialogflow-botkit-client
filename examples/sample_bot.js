@@ -10,21 +10,21 @@ const apiai = apiaibotkit(apiaiToken);
 const controller = Botkit.slackbot();
 
 controller.hears('.*', ['direct_message', 'direct_mention', 'mention'], function (bot, message) {
-    try {
-        apiai.process(message, bot);
-    } catch (err) {
-        console.error(err);
-    }
+    apiai.process(message, bot);
 });
 
 apiai.all(function (message, resp, bot) {
-   console.log(resp.result.action);
+    console.log(resp.result.action);
 });
 
-apiai.action('smalltalk.greetings', function (message, resp, bot) {
-    var responseText = resp.result.fulfillment.speech;
-    bot.reply(message, responseText);
-});
+apiai
+    .action('smalltalk.greetings', function (message, resp, bot) {
+        var responseText = resp.result.fulfillment.speech;
+        bot.reply(message, responseText);
+    })
+    .action('input.unknown', function (message, resp, bot) {
+        bot.reply(message, "Sorry, I don't understand");
+    });
 
 controller.spawn({
     token: slackToken

@@ -25,7 +25,7 @@ function isDefined(obj) {
 
 function createApiAiProcessing(token) {
     var worker = {};
-    
+
     worker.apiaiService = apiai(token, "subscription_key");
     worker.sessionIds = {};
 
@@ -33,20 +33,23 @@ function createApiAiProcessing(token) {
     worker.allCallback = [];
 
     worker.action = function (action, callback) {
-        if (worker.actionCallbacks[action]){
+        if (worker.actionCallbacks[action]) {
             worker.actionCallbacks[action].push(callback);
         } else {
             worker.actionCallbacks[action] = [callback];
         }
+
+        return worker;
     };
-    
+
     worker.all = function (callback) {
-      worker.allCallback.push(callback);
+        worker.allCallback.push(callback);
+        return worker;
     };
 
 
     worker.process = function (message, bot) {
-        try{
+        try {
             if (message.type == 'message') {
                 if (message.user == bot.identity.id) {
                     // message from bot can be skipped
@@ -85,7 +88,7 @@ function createApiAiProcessing(token) {
                             var action = response.result.action;
 
                             if (isDefined(action)) {
-                                if (worker.actionCallbacks[action]){
+                                if (worker.actionCallbacks[action]) {
                                     worker.actionCallbacks[action].forEach(function (callback) {
                                         callback(message, response, bot);
                                     });
@@ -99,7 +102,7 @@ function createApiAiProcessing(token) {
                     });
 
                     request.end();
-                    
+
                 }
             }
         } catch (err) {
