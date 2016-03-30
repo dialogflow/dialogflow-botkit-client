@@ -1,6 +1,6 @@
 {
   "name": "api-ai-botkit",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Utility lib for creating Slack bots",
   "main": "index.js",
   "repository": {
