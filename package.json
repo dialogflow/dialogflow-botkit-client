@@ -1,8 +1,15 @@
 {
-  "name": "apiai-botkit",
+  "name": "api-ai-botkit",
   "version": "1.0.0",
   "description": "Utility lib for creating Slack bots",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/api-ai/api-ai-botkit.git"
+  },
+  "bugs" : {
+    "url": "https://github.com/api-ai/api-ai-botkit/issues"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
