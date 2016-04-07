@@ -1,5 +1,7 @@
 # api-ai-botkit
 
+[![npm](https://img.shields.io/npm/v/api-ai-botkit.svg)](https://www.npmjs.com/package/api-ai-botkit)
+
 Utility lib for creating Slack bots
 
 For usage sample code see `examples/sample_bot.js`
