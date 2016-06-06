@@ -8,6 +8,11 @@ For usage sample code see `examples/sample_bot.js`
 
 ## Steps for using lib
 
+Install library from npm
+```sh
+npm install --save api-ai-botkit
+```
+
 Import Library
 ```js
 const apiaibotkit = require('api-ai-botkit');
