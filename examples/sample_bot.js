@@ -13,6 +13,10 @@ controller.hears('.*', ['direct_message', 'direct_mention', 'mention'], function
     apiai.process(message, bot);
 });
 
+controller.on('reaction_added', function (bot, message) {
+   console.log(message);
+});
+
 apiai.all(function (message, resp, bot) {
     console.log(resp.result.action);
 });
