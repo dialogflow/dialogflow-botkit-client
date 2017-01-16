@@ -24,7 +24,7 @@ function isDefined(obj) {
 }
 
 function createApiAiProcessing(token) {
-    var worker = {};
+    let worker = {};
 
     worker.apiaiService = apiai(token, "subscription_key");
     worker.sessionIds = {};
@@ -58,12 +58,12 @@ function createApiAiProcessing(token) {
                     // skip other users direct mentions
                 }
                 else {
-                    var requestText = decoder.decode(message.text);
+                    let requestText = decoder.decode(message.text);
                     requestText = requestText.replace("’", "'");
 
-                    var channel = message.channel;
-                    var messageType = message.event;
-                    var botId = '<@' + bot.identity.id + '>';
+                    let channel = message.channel;
+                    let messageType = message.event;
+                    let botId = '<@' + bot.identity.id + '>';
 
                     if (requestText.indexOf(botId) > -1) {
                         requestText = requestText.replace(botId, '');
@@ -73,23 +73,23 @@ function createApiAiProcessing(token) {
                         worker.sessionIds[channel] = uuid.v1();
                     }
 
-                    var request = worker.apiaiService.textRequest(requestText,
+                    let request = worker.apiaiService.textRequest(requestText,
                         {
                             sessionId: worker.sessionIds[channel]
                         });
 
-                    request.on('response', function (response) {
+                    request.on('response', (response) => {
 
-                        worker.allCallback.forEach(function (callback) {
+                        worker.allCallback.forEach((callback) => {
                             callback(message, response, bot);
                         });
 
                         if (isDefined(response.result)) {
-                            var action = response.result.action;
+                            let action = response.result.action;
 
                             if (isDefined(action)) {
                                 if (worker.actionCallbacks[action]) {
-                                    worker.actionCallbacks[action].forEach(function (callback) {
+                                    worker.actionCallbacks[action].forEach((callback) => {
                                         callback(message, response, bot);
                                     });
                                 }
@@ -97,7 +97,7 @@ function createApiAiProcessing(token) {
                         }
                     });
 
-                    request.on('error', function (error) {
+                    request.on('error', (error) => {
                         console.error(error);
                     });
 
