@@ -23,7 +23,7 @@ apiai.all(function (message, resp, bot) {
 
 apiai
     .action('smalltalk.greetings', function (message, resp, bot) {
-        var responseText = resp.result.fulfillment.speech;
+        let responseText = resp.result.fulfillment.speech;
         bot.reply(message, responseText);
     })
     .action('input.unknown', function (message, resp, bot) {
