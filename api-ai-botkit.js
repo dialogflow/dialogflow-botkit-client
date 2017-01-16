@@ -50,66 +50,77 @@ function createApiAiProcessing(token) {
 
     worker.process = function (message, bot) {
         try {
-            if (message.type == 'message') {
-                if (message.user == bot.identity.id) {
-                    // message from bot can be skipped
-                }
-                else if (message.text.indexOf("<@U") == 0 && message.text.indexOf(bot.identity.id) == -1) {
-                    // skip other users direct mentions
-                }
-                else {
-                    let requestText = decoder.decode(message.text);
-                    requestText = requestText.replace("’", "'");
 
-                    let channel = message.channel;
-                    let messageType = message.event;
+            if (isDefined(message.text)) {
+                let userId = message.user;
+
+                let requestText = decoder.decode(message.text);
+                requestText = requestText.replace("’", "'");
+
+                if (isDefined(bot.identity) && isDefined(bot.identity.id)) {
+                    // it seems it is Slack
+
+                    if (message.user == bot.identity.id) {
+                        // message from bot can be skipped
+                        return;
+                    }
+
+                    if (message.text.indexOf("<@U") == 0 && message.text.indexOf(bot.identity.id) == -1) {
+                        // skip other users direct mentions
+                        return;
+                    }
+
                     let botId = '<@' + bot.identity.id + '>';
-
                     if (requestText.indexOf(botId) > -1) {
                         requestText = requestText.replace(botId, '');
                     }
 
-                    if (!(channel in worker.sessionIds)) {
-                        worker.sessionIds[channel] = uuidV4();
-                    }
+                    userId = message.channel;
+                }
 
-                    let request = worker.apiaiService.textRequest(requestText,
-                        {
-                            sessionId: worker.sessionIds[channel]
-                        });
+                if (!(userId in worker.sessionIds)) {
+                    worker.sessionIds[userId] = uuidV4();
+                }
 
-                    request.on('response', (response) => {
-
-                        worker.allCallback.forEach((callback) => {
-                            callback(message, response, bot);
-                        });
-
-                        if (isDefined(response.result)) {
-                            let action = response.result.action;
-
-                            if (isDefined(action)) {
-                                if (worker.actionCallbacks[action]) {
-                                    worker.actionCallbacks[action].forEach((callback) => {
-                                        callback(message, response, bot);
-                                    });
-                                }
-                            }
+                let request = worker.apiaiService.textRequest(requestText,
+                    {
+                        sessionId: worker.sessionIds[userId],
+                        originalRequest: {
+                            data: message,
+                            source: "api-ai-botkit"
                         }
                     });
 
-                    request.on('error', (error) => {
-                        console.error(error);
+                request.on('response', (response) => {
+
+                    worker.allCallback.forEach((callback) => {
+                        callback(message, response, bot);
                     });
 
-                    request.end();
+                    if (isDefined(response.result)) {
+                        let action = response.result.action;
 
-                }
+                        if (isDefined(action)) {
+                            if (worker.actionCallbacks[action]) {
+                                worker.actionCallbacks[action].forEach((callback) => {
+                                    callback(message, response, bot);
+                                });
+                            }
+                        }
+                    }
+                });
+
+                request.on('error', (error) => {
+                    console.error(error);
+                });
+
+                request.end();
             }
+
         } catch (err) {
             console.error(err);
         }
     };
-
 
     return worker;
 }
