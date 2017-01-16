@@ -3,7 +3,7 @@
 const Botkit = require('botkit');
 const apiai = require('apiai');
 
-const uuid = require('node-uuid');
+const uuidV4 = require('uuid/v4');
 const Entities = require('html-entities').XmlEntities;
 const decoder = new Entities();
 
@@ -70,7 +70,7 @@ function createApiAiProcessing(token) {
                     }
 
                     if (!(channel in worker.sessionIds)) {
-                        worker.sessionIds[channel] = uuid.v1();
+                        worker.sessionIds[channel] = uuidV4();
                     }
 
                     let request = worker.apiaiService.textRequest(requestText,
