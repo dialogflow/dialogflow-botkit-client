@@ -26,7 +26,7 @@ function isDefined(obj) {
 function createApiAiProcessing(token) {
     let worker = {};
 
-    worker.apiaiService = apiai(token, "subscription_key");
+    worker.apiaiService = apiai(token);
     worker.sessionIds = {};
 
     worker.actionCallbacks = {};
