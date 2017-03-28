@@ -1,0 +1,17 @@
+{
+  "name": "API.AI with Slack integration",
+  "description": "Api.ai Slack integration allows you to create Slack bots with natural language understanding based on Api.ai technology.",
+  "repository": "https://github.com/api-ai/api-ai-slack-bot",
+  "logo": "https://console.api.ai/api-client/assets/img/logo-black.png",
+  "keywords": ["api.ai", "slack", "natural language"],
+  "env": {
+    "accesstoken": {
+      "description": "Client access token for Api.ai",
+      "value": ""
+    },
+    "slackkey": {
+      "description": "Slack bot user API token",
+      "value": ""
+    }
+  }
+}
